@@ -52,6 +52,33 @@ def process(raw):
             entry['topic'] = ""
             entry['project'] = ""
             entry['week'] = content
+            startdate = arrow.get('2017/9/25', 'YYYY/M/D')
+            currentweek = int(content)
+            
+            if currentweek == 1:
+            	currentdate = startdate
+            	nextdate = startdate.shift(weeks=+(1))
+            	
+            elif currentweek > 1:
+            	currentdate = startdate.shift(weeks=+(currentweek-1))
+            	nextdate = startdate.shift(weeks=+(currentweek))
+            	
+            now = arrow.now()
+            iscurrent = False
+            if now > currentdate and now < nextdate:
+            	iscurrent = True
+            answer = 'No'
+            if iscurrent:
+            	answer = 'Yes'
+            entry['isnow'] = iscurrent
+            
+            
+        	
+            
+            
+            	
+            finaldate = currentdate.format('YYYY/MM/DD')
+            entry['date'] = finaldate
 
         elif field == 'topic' or field == 'project':
             entry[field] = content
@@ -69,6 +96,7 @@ def main():
     f = open("data/schedule.txt")
     parsed = process(f)
     print(parsed)
+    
 
 
 if __name__ == "__main__":
